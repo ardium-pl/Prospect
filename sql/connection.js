@@ -6,13 +6,13 @@ export async function createConnection(subject) {
   return sql.connect(configDataBase(subject));
 }
 
-export async function getDatabaseNames() {
+async function getDatabaseNames() {
   const query = `SELECT name FROM sys.databases`;
   const result = await sql.query(query);
   return result.recordset.map(db => db.name);
 }
 
-export function configDataBase(subject) {
+function configDataBase(subject) {
   return {
     user: process.env.MSSQL_USER,
     server: process.env.MSSQL_SERVER,
