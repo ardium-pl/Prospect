@@ -2,17 +2,19 @@ import { getDatabaseSubjects } from "./sql/connection.js";
 import { getPlaca } from "./sql/queries.js";
 
 async function main() {
-    const subjects = await getDatabaseSubjects();
-    console.log(subjects);
-    for (let subject of subjects) {
-        console.log("Subject " + subject);
-        try {
-            const placa = await getPlaca(subject);
-            console.log(placa);
-        } catch (error) {
-            console.error(`Error for subject ${subject}:`, error.message);
-        }
+  const subjects = await getDatabaseSubjects();
+  for (let subject of subjects) {
+    try {
+      const bruttoValues = await getPlaca(subject);
+
+      const summedValue = bruttoValues.reduce((acc, curr) => acc + curr, 0);
+      const roundedSum = parseFloat(summedValue.toFixed(2));
+      
+      console.log("Summed Brutto value for subject (rounded):", roundedSum);
+    } catch (error) {
+      console.error(`Error for subject ${subject}:`, error.message);
     }
+  }
 }
 
 await main();
